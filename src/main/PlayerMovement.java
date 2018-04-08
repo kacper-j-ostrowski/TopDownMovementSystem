@@ -14,7 +14,7 @@ public class PlayerMovement {
 
     private int direction;
     private Tile position;
-    private ArrayList<HashMap<Integer, Boolean>> stack;
+    private ArrayList<Integer> stack;
     private HashMap<Integer, Boolean> keyMap;
 
     public PlayerMovement(int x, int y) {
@@ -22,10 +22,11 @@ public class PlayerMovement {
         direction = UP;
         stack = new ArrayList<>();
         keyMap = new HashMap<>();
-        keyMap.put(UP,false);
+        keyMap.put(UP,true);
         keyMap.put(DOWN,false);
         keyMap.put(LEFT,false);
         keyMap.put(RIGHT,false);
+        stack.add(UP);
     }
 
     public Tile getPosition()  { return position; }
@@ -33,15 +34,15 @@ public class PlayerMovement {
 
 
     public void update() {
-        if(isDirectionChanged().isPresent()) {
-            rotate(UP);
+        if(changedDirection().isPresent()) {
+            handleEvent(changedDirection().get());
         } else if(keyMap.get(direction)) {
             move();
         }
     }
 
 
-    public Optional<Integer> isDirectionChanged() {
+    public Optional<Integer> changedDirection() {
         for(Map.Entry<Integer, Boolean> e : keyMap.entrySet()) {
             if(Input.getState(e.getKey()) != e.getValue()) {
              return Optional.of(e.getKey());
@@ -60,7 +61,20 @@ public class PlayerMovement {
         }
     }
 
-    public void rotate(int d) {
-        direction = d;
+    public void handleEvent(int d) {
+        if(Input.getState(d)) {
+            stack.add(d);
+            direction = d;
+            keyMap.replace(d, true);
+        } else {
+            if(stack.size() > 0 && stack.get(stack.size()-1).equals(d)) {
+                direction = stack.size() > 1 ? stack.get(stack.size()-2) : direction;
+                stack.remove(stack.size()-1);
+            } else {
+                stack.remove(new Integer(d));
+                move();
+            }
+            keyMap.replace(d, false);
+        }
     }
 }
