@@ -1,9 +1,6 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class PlayerMovement {
 
@@ -11,6 +8,13 @@ public class PlayerMovement {
     private static final int DOWN = 2;
     private static final int LEFT = 4;
     private static final int RIGHT = 6;
+    private static final ArrayList<Integer> precedenceList = new ArrayList<>();
+    static {
+        precedenceList.add(RIGHT);
+        precedenceList.add(LEFT);
+        precedenceList.add(DOWN);
+        precedenceList.add(UP);
+    }
 
     private int direction;
     private Tile position;
@@ -22,11 +26,10 @@ public class PlayerMovement {
         direction = UP;
         stack = new ArrayList<>();
         keyMap = new HashMap<>();
-        keyMap.put(UP,true);
+        keyMap.put(UP,false);
         keyMap.put(DOWN,false);
         keyMap.put(LEFT,false);
         keyMap.put(RIGHT,false);
-        stack.add(UP);
     }
 
     public Tile getPosition()  { return position; }
@@ -42,11 +45,15 @@ public class PlayerMovement {
     }
 
 
-    public Optional<Integer> changedDirection() {
+    public Optional<List<Integer>> changedDirection() {
+        ArrayList<Integer> changedDirs = new ArrayList<>();
         for(Map.Entry<Integer, Boolean> e : keyMap.entrySet()) {
             if(Input.getState(e.getKey()) != e.getValue()) {
-             return Optional.of(e.getKey());
+                changedDirs.add(e.getKey());
             }
+        }
+        if(changedDirs.size() > 0) {
+            return Optional.of(changedDirs);
         }
         return Optional.empty();
     }
@@ -61,20 +68,24 @@ public class PlayerMovement {
         }
     }
 
-    public void handleEvent(int d) {
-        if(Input.getState(d)) {
-            stack.add(d);
-            direction = d;
-            keyMap.replace(d, true);
-        } else {
-            if(stack.size() > 0 && stack.get(stack.size()-1).equals(d)) {
-                direction = stack.size() > 1 ? stack.get(stack.size()-2) : direction;
-                stack.remove(stack.size()-1);
-            } else {
-                stack.remove(new Integer(d));
-                move();
+    public void handleEvent(List<Integer> dirs) {
+        for(Integer d : precedenceList) {
+            if(dirs.contains(d)) {
+                if(Input.getState(d)) {
+                    stack.add(d);
+                    direction = d;
+                    keyMap.replace(d, true);
+                } else {
+                    if(stack.size() > 0 && stack.get(stack.size()-1).equals(d)) {
+                        direction = stack.size() > 1 ? stack.get(stack.size()-2) : direction;
+                        stack.remove(stack.size()-1);
+                    } else {
+                        stack.remove(new Integer(d));
+                        move();
+                    }
+                    keyMap.replace(d, false);
+                }
             }
-            keyMap.replace(d, false);
         }
     }
 }
