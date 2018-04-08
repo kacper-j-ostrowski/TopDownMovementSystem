@@ -18,6 +18,8 @@ public class PlayerMovementTest {
 
     @Test
     public void test_changing_direction() {
+        Input.press(8);
+        playerMovement.update();
         Input.press(2);
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 2);
@@ -41,13 +43,13 @@ public class PlayerMovementTest {
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 8);
-        assertEquals(playerMovement.getPosition(), new Tile(0,2));
+        assertEquals(playerMovement.getPosition(), new Tile(0,1));
 
         Input.press(6);
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 6);
-        assertEquals(playerMovement.getPosition(), new Tile(1,2));
+        assertEquals(playerMovement.getPosition(), new Tile(1,1));
     }
 
 
@@ -57,19 +59,19 @@ public class PlayerMovementTest {
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 8);
-        assertEquals(playerMovement.getPosition(), new Tile(0,2));
+        assertEquals(playerMovement.getPosition(), new Tile(0,1));
 
         Input.press(6);
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 6);
-        assertEquals(playerMovement.getPosition(), new Tile(1,2));
+        assertEquals(playerMovement.getPosition(), new Tile(1,1));
 
         Input.release(6);
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 8);
-        assertEquals(playerMovement.getPosition(), new Tile(1,3));
+        assertEquals(playerMovement.getPosition(), new Tile(1,2));
     }
 
 
@@ -80,60 +82,60 @@ public class PlayerMovementTest {
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 8);
-        assertEquals(playerMovement.getPosition(), new Tile(0,2));
+        assertEquals(playerMovement.getPosition(), new Tile(0,1));
 
         Input.press(6);
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 6);
-        assertEquals(playerMovement.getPosition(), new Tile(1,2));
+        assertEquals(playerMovement.getPosition(), new Tile(1,1));
 
         Input.release(6);
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 8);
-        assertEquals(playerMovement.getPosition(), new Tile(1,3));
+        assertEquals(playerMovement.getPosition(), new Tile(1,2));
 
         Input.press(2);
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 2);
-        assertEquals(playerMovement.getPosition(), new Tile(1,2));
+        assertEquals(playerMovement.getPosition(), new Tile(1,1));
 
         Input.press(6);
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 6);
-        assertEquals(playerMovement.getPosition(), new Tile(2,2));
+        assertEquals(playerMovement.getPosition(), new Tile(2,1));
 
         Input.press(4);
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 4);
-        assertEquals(playerMovement.getPosition(), new Tile(1,2));
+        assertEquals(playerMovement.getPosition(), new Tile(1,1));
 
         Input.release(2);
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 4);
-        assertEquals(playerMovement.getPosition(), new Tile(-1,2));
+        assertEquals(playerMovement.getPosition(), new Tile(-1,1));
 
         Input.release(4);
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 6);
-        assertEquals(playerMovement.getPosition(), new Tile(0,2));
+        assertEquals(playerMovement.getPosition(), new Tile(0,1));
 
         Input.release(6);
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 8);
-        assertEquals(playerMovement.getPosition(), new Tile(0,3));
+        assertEquals(playerMovement.getPosition(), new Tile(0,2));
 
         Input.release(8);
         playerMovement.update();
         playerMovement.update();
         assertEquals(playerMovement.getDirection(), 8);
-        assertEquals(playerMovement.getPosition(), new Tile(0,3));
+        assertEquals(playerMovement.getPosition(), new Tile(0,2));
     }
 }
